@@ -8,24 +8,77 @@ Connect an AI client with an active Professional (Pro) subscription to the hoste
 https://reporters.io/api/mcp
 ```
 
-This repository contains public server metadata, connection instructions and discovery checks. The hosted server implementation stays in the product repository. Publishing this repository does not register a server in an MCP registry.
+This repository contains public server metadata, client configurations, a local stdio bridge, and discovery checks. The hosted server implementation stays in the product repository. Publishing this repository does not register a server in an MCP registry.
 
 ## Connect
 
-Create an API key in the [Reporters.io API-key dashboard](https://reporters.io/account/api-keys) while your Professional (Pro) subscription is active. Enter a name; all six API permissions are included automatically. Keys have no automatic expiration, can be revoked, and are limited to 10 active keys per account. Configure your MCP client's remote HTTP connection with the URL above and one header: `Authorization: Bearer YOUR_REPORTERS_API_KEY`. Load the actual value from `REPORTERS_API_KEY` through your client's secret mechanism. Do not put credentials in the URL, conversation or committed configuration.
+Create an API key in the [Reporters.io API-key dashboard](https://reporters.io/developers/api/keys) while your Professional (Pro) subscription is active. Enter a name; all six API permissions are included automatically. Keys have no automatic expiration, can be revoked, and are limited to 10 active keys per account. Configure your MCP client's remote HTTP connection with the URL above and one header: `Authorization: Bearer YOUR_REPORTERS_API_KEY`. Load the actual value from `REPORTERS_API_KEY` through your client's secret mechanism. Do not put credentials in the URL, conversation or committed configuration.
 
-Generic client configuration (replace the placeholder using the client's secret facility):
+## Connect your client
+
+Set `REPORTERS_API_KEY` in the environment that launches your client. These configurations keep the key value outside the configuration file. The hosted server uses API keys, without an OAuth sign-in flow.
+
+### Claude Code
+
+Merge this entry into your project's `.mcp.json`, approve the server, and check it with `/mcp`:
+
+```json
+{
+  "mcpServers": {
+    "reporters": {
+      "type": "http",
+      "url": "https://reporters.io/api/mcp",
+      "headers": { "Authorization": "Bearer ${REPORTERS_API_KEY}" }
+    }
+  }
+}
+```
+
+[Claude Code MCP reference](https://code.claude.com/docs/en/mcp)
+
+### Cursor
+
+Merge this entry into `.cursor/mcp.json` and enable the server in Cursor's MCP settings:
 
 ```json
 {
   "mcpServers": {
     "reporters": {
       "url": "https://reporters.io/api/mcp",
-      "headers": {"Authorization": "Bearer YOUR_REPORTERS_API_KEY"}
+      "headers": { "Authorization": "Bearer ${env:REPORTERS_API_KEY}" }
     }
   }
 }
 ```
+
+[Cursor MCP reference](https://cursor.com/docs/mcp)
+
+### Codex
+
+Add this entry to `~/.codex/config.toml` and restart the client:
+
+```toml
+[mcp_servers.reporters]
+url = "https://reporters.io/api/mcp"
+bearer_token_env_var = "REPORTERS_API_KEY"
+```
+
+[Codex MCP reference](https://learn.chatgpt.com/docs/extend/mcp)
+
+## Local stdio bridge
+
+Use the local bridge for an MCP client that launches a process instead of connecting directly to Streamable HTTP. Requires Node.js 20 or later. Clone and install this repository:
+
+```bash
+git clone https://github.com/ricciflow-api/reporters-mcp.git
+cd reporters-mcp
+npm ci
+```
+
+Provide `REPORTERS_API_KEY` through your client's protected environment settings. Configure it to run `node /absolute/path/reporters-mcp/src/index.mjs`, or run `npm start` from the repository when diagnosing a connection. Standard output is reserved for MCP protocol messages.
+
+The bridge forwards the hosted server's current tool schemas, annotations, results, and errors. It verifies hosted access before startup and sends every discovery and tool request to the hosted server. It does not cache contacts, follow redirects, or retry calls automatically. Active Pro access and key revocation are still enforced by the hosted service. This repository is not published as an npm package; use the clone above.
+
 
 ## Tools
 
@@ -58,6 +111,7 @@ Revoked keys cannot authorize REST or MCP requests. Existing keys also stop work
 ## Check the connection
 
 ```bash
+npm ci
 npm test
 npm run test:live
 # With REPORTERS_API_KEY set; initialization and discovery only:

@@ -7,4 +7,4 @@ assert.equal(metadata.remotes[0].type, 'streamable-http');
 assert.equal(metadata.remotes[0].url, 'https://reporters.io/api/mcp');
 assert.equal(metadata.remotes[0].headers[0].name, 'Authorization');
 assert.equal(metadata.remotes[0].headers[0].isSecret, true);
-assert.equal(spawnSync('node', ['--test', 'tests/discovery.test.mjs'], { stdio: 'inherit' }).status, 0);
+assert.equal(spawnSync('node', ['--test', 'tests/discovery.test.mjs', 'tests/bridge.test.mjs'], { stdio: 'inherit' }).status, 0);

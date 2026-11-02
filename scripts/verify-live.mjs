@@ -7,7 +7,7 @@ if (!process.argv.includes('--authenticated')) {
 } else {
   const result = await discover();
   const names = result.tools.map(tool => tool.name);
-  assert.ok(names.length > 0, "Key scopes must expose at least one supported tool");
+  assert.ok(names.length > 0, "Authenticated discovery must expose supported tools");
   assert.equal(new Set(names).size, names.length, "Tool names must be unique");
   assert.ok(names.every(name => expectedTools.includes(name)), "Discovery returned an unknown public tool");
   assert.notEqual(result.initialized.capabilities?.tools?.listChanged, true, "Fixed tool catalogs must not advertise change subscriptions");

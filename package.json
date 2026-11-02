@@ -8,6 +8,12 @@
   },
   "scripts": {
     "test": "node scripts/validate.mjs",
-    "test:live": "node scripts/verify-live.mjs"
+    "test:live": "node scripts/verify-live.mjs",
+    "start": "node src/index.mjs"
+  },
+  "type": "module",
+  "description": "Reporters.io hosted MCP configuration and local stdio bridge",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.32.2"
   }
 }

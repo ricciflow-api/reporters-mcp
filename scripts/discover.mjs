@@ -12,7 +12,7 @@ export function parseRpc(text, expectedId) {
       try { return [JSON.parse(data)]; } catch { return []; }
     });
   }
-  const result = values.find(value => value.id === expectedId);
+  const result = values.find(value => value && typeof value === 'object' && value.id === expectedId);
   if (!result || result.error) throw new Error('MCP discovery returned an invalid or error response');
   return result.result;
 }

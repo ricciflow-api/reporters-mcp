@@ -6,6 +6,7 @@ test('parses a bounded JSON or SSE discovery response', () => {
   assert.deepEqual(parseRpc('{"jsonrpc":"2.0","id":1,"result":{"ok":true}}', 1), { ok: true });
   assert.deepEqual(parseRpc('event: message\ndata: {"jsonrpc":"2.0","id":1,"result":{"ok":true}}\n\n', 1), { ok: true });
   assert.throws(() => parseRpc('{"id":1,"error":{"message":"private"}}', 1), /invalid or error/);
+  assert.throws(() => parseRpc('null', 1), /invalid or error/);
 });
 
 test('only initialization, notification and discovery are sent; Bearer stays in headers', async () => {
