@@ -43,6 +43,8 @@ Generic client configuration (replace the placeholder using the client's secret 
 | `reveal_outlet_contacts` | Explicit, entitled contact reveal for one outlet. |
 | `get_search_filters` | Get supported search-filter values. |
 
+Discovery returns the tools permitted by the API key's scopes; a key without `contacts:read` does not expose contact-reveal tools.
+
 Tool inputs use `reporter_id` (numeric string), `outlet_id` (UUID string) and snake_case fields. Use returned IDs and supported filter values. Read `structuredContent` for complete results. Search/list data contains `items`, `next_cursor` and `has_more`; preserve the original filters and limit when continuing a search snapshot. Stop on empty/repeated results, expired cursors or the user's request budget. The initial snapshot is bounded to at most 100 matches and is not exhaustive database access.
 
 Initialization and discovery do not reveal contacts. Search and contact-reveal operations follow the account's current entitlement, shared with REST. Profile and article reads never implicitly reveal contacts. Request contact access only when the user explicitly asks for it; the server checks `contacts:read` and current entitlement. Do not bulk enumerate contacts. Lists, exports and OAuth are outside the initial release.

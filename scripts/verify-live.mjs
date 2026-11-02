@@ -6,6 +6,10 @@ if (!process.argv.includes('--authenticated')) {
   console.log('Live MCP missing-key rejection passed; no data tools called.');
 } else {
   const result = await discover();
-  assert.deepEqual(result.tools.map(tool => tool.name).sort(), expectedTools);
+  const names = result.tools.map(tool => tool.name);
+  assert.ok(names.length > 0, "Key scopes must expose at least one supported tool");
+  assert.equal(new Set(names).size, names.length, "Tool names must be unique");
+  assert.ok(names.every(name => expectedTools.includes(name)), "Discovery returned an unknown public tool");
+  assert.notEqual(result.initialized.capabilities?.tools?.listChanged, true, "Fixed tool catalogs must not advertise change subscriptions");
   console.log('Live authenticated initialization and tool discovery passed; no data tools called.');
 }
