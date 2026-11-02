@@ -11,7 +11,7 @@
       "headers": [
         {
           "name": "Authorization",
-          "description": "Bearer followed by a scoped Reporters.io API key. Creating and using keys requires active Professional (Pro) access.",
+          "description": "Bearer followed by a Reporters.io API key. All API permissions are included automatically; active Professional (Pro) access is required.",
           "isRequired": true,
           "isSecret": true
         }
