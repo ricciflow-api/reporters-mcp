@@ -1,0 +1,26 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.ricciflow-api/reporters",
+  "title": "Reporters.io",
+  "description": "Research reporters, outlets and published articles, with explicit entitled contact reveal.",
+  "version": "1.0.0",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://reporters.io/api/mcp",
+      "headers": [
+        {
+          "name": "Authorization",
+          "description": "Bearer followed by a Reporters.io API key from the account dashboard.",
+          "isRequired": true,
+          "isSecret": true
+        }
+      ]
+    }
+  ],
+  "repository": {
+    "url": "https://github.com/ricciflow-api/reporters-mcp",
+    "source": "github"
+  },
+  "websiteUrl": "https://reporters.io"
+}

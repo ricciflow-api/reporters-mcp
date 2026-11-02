@@ -1,0 +1,10 @@
+import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
+const metadata = JSON.parse(readFileSync('server.json', 'utf8'));
+assert.equal(metadata.name, 'io.github.ricciflow-api/reporters');
+assert.equal(metadata.remotes[0].type, 'streamable-http');
+assert.equal(metadata.remotes[0].url, 'https://reporters.io/api/mcp');
+assert.equal(metadata.remotes[0].headers[0].name, 'Authorization');
+assert.equal(metadata.remotes[0].headers[0].isSecret, true);
+assert.equal(spawnSync('node', ['--test', 'tests/discovery.test.mjs'], { stdio: 'inherit' }).status, 0);
